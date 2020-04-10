@@ -22,19 +22,33 @@ describe('Covid19 Estimator', () => {
   });
 
   test('compute impact data', () => {
+    const currentlyInfected = input.reportedCases * 10;
+    const infectionsByRequestedTime = currentlyInfected * (2 ** (input.timeToElapse / 3));
+    const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+    const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
+    const hospitalBedsByRequestedTime = beds;
     expect(estimator(input)).toMatchObject({
       impact: {
-        currentlyInfected: 6740,
-        infectionsByRequestedTime: 6740 * (2 ** (28 / 3))
+        currentlyInfected,
+        infectionsByRequestedTime,
+        severeCasesByRequestedTime,
+        hospitalBedsByRequestedTime
       }
     });
   });
 
-  test('compute severe Impact data', () => {
+  test('compute severe impact data', () => {
+    const currentlyInfected = input.reportedCases * 50;
+    const infectionsByRequestedTime = currentlyInfected * (2 ** (input.timeToElapse / 3));
+    const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+    const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
+    const hospitalBedsByRequestedTime = beds;
     expect(estimator(input)).toMatchObject({
       severeImpact: {
-        currentlyInfected: 33700,
-        infectionsByRequestedTime: 33700 * (2 ** (28 / 3))
+        currentlyInfected,
+        infectionsByRequestedTime,
+        severeCasesByRequestedTime,
+        hospitalBedsByRequestedTime
       }
     });
   });
