@@ -27,12 +27,20 @@ describe('Covid19 Estimator', () => {
     const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
     const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
     const hospitalBedsByRequestedTime = beds;
+    const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
+    const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
+    const dollarsInFlight = (infectionsByRequestedTime * input.avgDailyIncomePopulation)
+                              * input.avgDailyIncomeInUSD * input.timeToElapse;
+
     expect(estimator(input)).toMatchObject({
       impact: {
         currentlyInfected,
         infectionsByRequestedTime,
         severeCasesByRequestedTime,
-        hospitalBedsByRequestedTime
+        hospitalBedsByRequestedTime,
+        casesForICUByRequestedTime,
+        casesForVentilatorsByRequestedTime,
+        dollarsInFlight
       }
     });
   });
@@ -43,12 +51,19 @@ describe('Covid19 Estimator', () => {
     const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
     const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
     const hospitalBedsByRequestedTime = beds;
+    const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
+    const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
+    const dollarsInFlight = (infectionsByRequestedTime * input.avgDailyIncomePopulation)
+                              * input.avgDailyIncomeInUSD * input.timeToElapse;
     expect(estimator(input)).toMatchObject({
       severeImpact: {
         currentlyInfected,
         infectionsByRequestedTime,
         severeCasesByRequestedTime,
-        hospitalBedsByRequestedTime
+        hospitalBedsByRequestedTime,
+        casesForICUByRequestedTime,
+        casesForVentilatorsByRequestedTime,
+        dollarsInFlight
       }
     });
   });
