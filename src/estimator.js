@@ -36,38 +36,31 @@ const dollarsInFlight = (infByReqT, pop, income, period) => (infByReqT * pop) * 
 
 // main
 const covid19ImpactEstimator = (data) => {
+  // Challenge 1
   const impactInf = currentlyInfected(data.reportedCases, 10);
-  const sImpactInf = currentlyInfected(data.reportedCases, 50);
+  const severeImpactInf = currentlyInfected(data.reportedCases, 50);
 
   const impInfByReqT = infectionsByRequestedTime(impactInf, data.periodType, data.timeToElapse);
-  const sImpInfByReqT = infectionsByRequestedTime(sImpactInf, data.periodType, data.timeToElapse);
-
-  output.impact.currentlyInfected = impactInf;
-  output.severeImpact.currentlyInfected = sImpactInf;
-
-  output.impact.infectionsByRequestedTime = impInfByReqT;
-  output.severeImpact.infectionsByRequestedTime = sImpInfByReqT;
+  const severeImpInfByReqT = infectionsByRequestedTime(
+    severeImpactInf,
+    data.periodType,
+    data.timeToElapse
+  );
 
   // Challenge 2
   const impactSevereCasesByReqT = severeCasesByRequestedTime(impInfByReqT);
-  const sImpactSevereCasesByReqT = severeCasesByRequestedTime(sImpInfByReqT);
-
-  output.impact.severeCasesByRequestedTime = impactSevereCasesByReqT;
-  output.severeImpact.severeCasesByRequestedTime = sImpactSevereCasesByReqT;
+  const severeImpactSevereCasesByReqT = severeCasesByRequestedTime(severeImpInfByReqT);
 
   const availableBeds = availableHospitalBeds(data.totalHospitalBeds);
   const impactHospitalBeds = Math.round(availableBeds - impactSevereCasesByReqT);
-  const sImpactHospitalBeds = Math.round(availableBeds - sImpactSevereCasesByReqT);
-
-  output.impact.hospitalBedsByRequestedTime = impactHospitalBeds;
-  output.severeImpact.hospitalBedsByRequestedTime = sImpactHospitalBeds;
+  const severeImpactHospitalBeds = Math.round(availableBeds - severeImpactSevereCasesByReqT);
 
   // Challenge 3
   const impactCasesForICUByReqT = casesForICUByRequestedTime(impInfByReqT);
-  const sImpactCasesForICUByReqT = casesForICUByRequestedTime(sImpInfByReqT);
+  const severeImpactCasesForICUByReqT = casesForICUByRequestedTime(severeImpInfByReqT);
 
   const impactCasesForVentilators = casesForVentilatorsByRequestedTime(impInfByReqT);
-  const severeImpactCasesForVentilators = casesForVentilatorsByRequestedTime(sImpInfByReqT);
+  const severeImpactCasesForVentilators = casesForVentilatorsByRequestedTime(severeImpInfByReqT);
 
   const impactDollarsInFlight = dollarsInFlight(
     impInfByReqT,
@@ -76,21 +69,32 @@ const covid19ImpactEstimator = (data) => {
     durationInDays(data.periodType, data.timeToElapse)
   );
 
-  const sImpactDollarsInFlight = dollarsInFlight(
-    sImpInfByReqT,
+  const severeImpactDollarsInFlight = dollarsInFlight(
+    severeImpInfByReqT,
     data.avgDailyIncomePopulation,
     data.avgDailyIncomeInUSD,
     durationInDays(data.periodType, data.timeToElapse)
   );
 
-  output.impact.casesForICUByRequestedTime = impactCasesForICUByReqT;
-  output.severeImpact.casesForICUByRequestedTime = sImpactCasesForICUByReqT;
+  output.impact = {
+    currentlyInfected: impactInf,
+    infectionsByRequestedTime: impInfByReqT,
+    severeCasesByRequestedTime: impactSevereCasesByReqT,
+    hospitalBedsByRequestedTime: impactHospitalBeds,
+    casesForICUByRequestedTime: impactCasesForICUByReqT,
+    casesForVentilatorsByRequestedTime: impactCasesForVentilators,
+    dollarsInFlight: impactDollarsInFlight
+  };
 
-  output.impact.casesForVentilatorsByRequestedTime = impactCasesForVentilators;
-  output.severeImpact.casesForVentilatorsByRequestedTime = severeImpactCasesForVentilators;
-
-  output.impact.dollarsInFlight = impactDollarsInFlight;
-  output.severeImpact.dollarsInFlight = sImpactDollarsInFlight;
+  output.severeImpact = {
+    currentlyInfected: severeImpactInf,
+    infectionsByRequestedTime: severeImpInfByReqT,
+    severeCasesByRequestedTime: severeImpactSevereCasesByReqT,
+    hospitalBedsByRequestedTime: severeImpactHospitalBeds,
+    casesForICUByRequestedTime: severeImpactCasesForICUByReqT,
+    casesForVentilatorsByRequestedTime: severeImpactCasesForVentilators,
+    dollarsInFlight: severeImpactDollarsInFlight
+  };
 
   output.data = data;
 
