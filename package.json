@@ -9,6 +9,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "jsontoxml": "^1.0.1",
     "on-covid-19": "^0.1.3"
   },
   "devDependencies": {

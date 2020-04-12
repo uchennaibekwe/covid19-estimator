@@ -23,14 +23,18 @@ describe('Covid19 Estimator', () => {
 
   test('compute impact data', () => {
     const currentlyInfected = input.reportedCases * 10;
-    const infectionsByRequestedTime = currentlyInfected * (2 ** (input.timeToElapse / 3));
-    const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
-    const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
+    const infectionsByRequestedTime = Math.trunc(
+      currentlyInfected * (2 ** (input.timeToElapse / 3))
+    );
+    const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime);
+    const beds = Math.trunc(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
     const hospitalBedsByRequestedTime = beds;
-    const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
-    const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
-    const dollarsInFlight = (infectionsByRequestedTime * input.avgDailyIncomePopulation)
-                              * input.avgDailyIncomeInUSD * input.timeToElapse;
+    const casesForICUByRequestedTime = Math.trunc(0.05 * infectionsByRequestedTime);
+    const casesForVentilatorsByRequestedTime = Math.trunc(0.02 * infectionsByRequestedTime);
+    const dollarsInFlight = Math.trunc(
+      (infectionsByRequestedTime * input.region.avgDailyIncomePopulation
+      * input.region.avgDailyIncomeInUSD) / input.timeToElapse
+    );
 
     expect(estimator(input)).toMatchObject({
       impact: {
@@ -47,14 +51,18 @@ describe('Covid19 Estimator', () => {
 
   test('compute severe impact data', () => {
     const currentlyInfected = input.reportedCases * 50;
-    const infectionsByRequestedTime = currentlyInfected * (2 ** (input.timeToElapse / 3));
-    const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
-    const beds = Math.round(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
+    const infectionsByRequestedTime = Math.trunc(
+      currentlyInfected * (2 ** (input.timeToElapse / 3))
+    );
+    const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime);
+    const beds = Math.trunc(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
     const hospitalBedsByRequestedTime = beds;
-    const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
-    const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
-    const dollarsInFlight = (infectionsByRequestedTime * input.avgDailyIncomePopulation)
-                              * input.avgDailyIncomeInUSD * input.timeToElapse;
+    const casesForICUByRequestedTime = Math.trunc(0.05 * infectionsByRequestedTime);
+    const casesForVentilatorsByRequestedTime = Math.trunc(0.02 * infectionsByRequestedTime);
+    const dollarsInFlight = Math.trunc(
+      (infectionsByRequestedTime * input.region.avgDailyIncomePopulation
+      * input.region.avgDailyIncomeInUSD) / input.timeToElapse
+    );
     expect(estimator(input)).toMatchObject({
       severeImpact: {
         currentlyInfected,
@@ -73,7 +81,7 @@ describe('Covid19 Estimator', () => {
     input.timeToElapse = 1;
     expect(estimator(input)).toMatchObject({
       impact: {
-        infectionsByRequestedTime: 6740 * (2 ** (28 / 3))
+        infectionsByRequestedTime: Math.trunc(6740 * (2 ** (30 / 3)))
       }
     });
   });
@@ -83,7 +91,7 @@ describe('Covid19 Estimator', () => {
     input.timeToElapse = 4;
     expect(estimator(input)).toMatchObject({
       impact: {
-        infectionsByRequestedTime: 6740 * (2 ** (28 / 3))
+        infectionsByRequestedTime: Math.trunc(6740 * (2 ** (28 / 3)))
       }
     });
   });

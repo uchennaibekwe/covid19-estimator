@@ -9,13 +9,14 @@ const currentlyInfected = (reportedCases, impact) => reportedCases * impact;
 
 const durationInDays = (periodType, timeToElapse) => {
   const duration = parseInt(timeToElapse, 10);
-  switch (periodType) {
+  const period = periodType.toLowerCase();
+  switch (period) {
     case 'days':
       return duration;
     case 'weeks':
       return duration * 7;
     case 'months':
-      return duration * 28;
+      return duration * 30;
     default:
       return null;
   }
@@ -23,15 +24,21 @@ const durationInDays = (periodType, timeToElapse) => {
 
 const infectionsByRequestedTime = (infected, periodType, timeToElapse) => {
   const duration = (durationInDays(periodType, timeToElapse));
-  return infected * (2 ** (duration / 3));
+  return Math.trunc(infected * (2 ** (duration / 3)));
 };
 
-const severeCasesByRequestedTime = (infectionsByReqTime) => 0.15 * infectionsByReqTime;
+const severeCasesByRequestedTime = (infectionsByReqTime) => Math.trunc(0.15 * infectionsByReqTime);
 const availableHospitalBeds = (totalHospitalBeds) => 0.35 * totalHospitalBeds;
 
-const casesForICUByRequestedTime = (infByRequestedTime) => 0.05 * infByRequestedTime;
-const casesForVentilatorsByRequestedTime = (infByRequestedTime) => 0.02 * infByRequestedTime;
-const dollarsInFlight = (infByReqT, pop, income, period) => (infByReqT * pop) * income * period;
+const casesForICUByRequestedTime = (infByRequestedTime) => Math.trunc(0.05 * infByRequestedTime);
+const casesForVentilatorsByRequestedTime = (infByRequestedTime) => {
+  const cases = (0.02 * infByRequestedTime);
+  return Math.trunc(cases);
+};
+const dollarsInFlight = (infByReqT, pop, income, period) => {
+  const dollars = (infByReqT * pop * income) / period;
+  return Math.trunc(dollars);
+};
 // End functions
 
 // main
@@ -52,8 +59,8 @@ const covid19ImpactEstimator = (data) => {
   const severeImpactSevereCasesByReqT = severeCasesByRequestedTime(severeImpInfByReqT);
 
   const availableBeds = availableHospitalBeds(data.totalHospitalBeds);
-  const impactHospitalBeds = Math.round(availableBeds - impactSevereCasesByReqT);
-  const severeImpactHospitalBeds = Math.round(availableBeds - severeImpactSevereCasesByReqT);
+  const impactHospitalBeds = Math.trunc(availableBeds - impactSevereCasesByReqT);
+  const severeImpactHospitalBeds = Math.trunc(availableBeds - severeImpactSevereCasesByReqT);
 
   // Challenge 3
   const impactCasesForICUByReqT = casesForICUByRequestedTime(impInfByReqT);
@@ -64,15 +71,15 @@ const covid19ImpactEstimator = (data) => {
 
   const impactDollarsInFlight = dollarsInFlight(
     impInfByReqT,
-    data.avgDailyIncomePopulation,
-    data.avgDailyIncomeInUSD,
+    data.region.avgDailyIncomePopulation,
+    data.region.avgDailyIncomeInUSD,
     durationInDays(data.periodType, data.timeToElapse)
   );
 
   const severeImpactDollarsInFlight = dollarsInFlight(
     severeImpInfByReqT,
-    data.avgDailyIncomePopulation,
-    data.avgDailyIncomeInUSD,
+    data.region.avgDailyIncomePopulation,
+    data.region.avgDailyIncomeInUSD,
     durationInDays(data.periodType, data.timeToElapse)
   );
 
