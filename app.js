@@ -54,3 +54,4 @@ app.post('/api/v1/on-covid-19/:format', (req, res) => {
 
 const server = createServer(app);
 server.listen(3000);
+console.log('started at 3000');
