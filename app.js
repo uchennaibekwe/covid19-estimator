@@ -16,6 +16,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success'
+  });
+});
+
 app.post('/api/v1/on-covid-19', (req, res) => {
   const response = estimator(req.body);
   res.status(200).json(response);
