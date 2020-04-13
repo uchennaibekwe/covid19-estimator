@@ -24,7 +24,7 @@ describe('Covid19 Estimator', () => {
   test('compute impact data', () => {
     const currentlyInfected = input.reportedCases * 10;
     const infectionsByRequestedTime = Math.trunc(
-      currentlyInfected * (2 ** (input.timeToElapse / 3))
+      currentlyInfected * (2 ** Math.trunc(input.timeToElapse / 3))
     );
     const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime);
     const beds = Math.trunc(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
@@ -52,7 +52,7 @@ describe('Covid19 Estimator', () => {
   test('compute severe impact data', () => {
     const currentlyInfected = input.reportedCases * 50;
     const infectionsByRequestedTime = Math.trunc(
-      currentlyInfected * (2 ** (input.timeToElapse / 3))
+      currentlyInfected * (2 ** Math.trunc(input.timeToElapse / 3))
     );
     const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime);
     const beds = Math.trunc(((0.35 * input.totalHospitalBeds) - severeCasesByRequestedTime));
@@ -81,7 +81,7 @@ describe('Covid19 Estimator', () => {
     input.timeToElapse = 1;
     expect(estimator(input)).toMatchObject({
       impact: {
-        infectionsByRequestedTime: Math.trunc(6740 * (2 ** (30 / 3)))
+        infectionsByRequestedTime: Math.trunc(6740 * (2 ** Math.trunc(30 / 3)))
       }
     });
   });
@@ -91,7 +91,7 @@ describe('Covid19 Estimator', () => {
     input.timeToElapse = 4;
     expect(estimator(input)).toMatchObject({
       impact: {
-        infectionsByRequestedTime: Math.trunc(6740 * (2 ** (28 / 3)))
+        infectionsByRequestedTime: Math.trunc(6740 * (2 ** Math.trunc(28 / 3)))
       }
     });
   });
