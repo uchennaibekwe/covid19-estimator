@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint ./src/",
     "test": "jest",
-    "start": "node server.js"
+    "start": "node -r esm server.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
