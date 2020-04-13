@@ -24,7 +24,7 @@ const durationInDays = (periodType, timeToElapse) => {
 
 const infectionsByRequestedTime = (infected, periodType, timeToElapse) => {
   const duration = (durationInDays(periodType, timeToElapse));
-  return Math.trunc(infected * (2 ** (duration / 3)));
+  return infected * (2 ** Math.trunc((duration / 3)));
 };
 
 const severeCasesByRequestedTime = (infectionsByReqTime) => Math.trunc(0.15 * infectionsByReqTime);
