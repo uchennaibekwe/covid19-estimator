@@ -1,7 +1,6 @@
 import express from 'express';
 import { json } from 'body-parser';
 import jsontoxml from 'jsontoxml';
-import { createServer } from 'http';
 import estimator from './src/estimator';
 
 
@@ -52,6 +51,4 @@ app.post('/api/v1/on-covid-19/:format', (req, res) => {
   }
 });
 
-const server = createServer(app);
-server.listen(process.env.PORT || 3000);
-console.log('started at 3000');
+export default app;
