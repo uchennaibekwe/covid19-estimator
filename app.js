@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
   res.on('finish', () => {
     const durationInMilliseconds = getDurationInMilliseconds(start);
-    const logString = `${req.method} \t ${req.originalUrl} \t ${res.statusCode} \t ${Math.trunc(durationInMilliseconds.toLocaleString())}ms\n`;
+    const logString = `${req.method}\t${req.originalUrl}\t${res.statusCode}\t${Math.trunc(durationInMilliseconds.toLocaleString())}ms\n`;
     fs.appendFile('logs.txt', logString, (err) => {
       if (err) {
         res.send(err);
