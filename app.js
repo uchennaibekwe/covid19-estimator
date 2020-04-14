@@ -55,8 +55,8 @@ app.post('/api/v1/on-covid-19/json', (req, res) => {
 
 app.post('/api/v1/on-covid-19/xml', (req, res) => {
   const jsonResponse = estimator(req.body);
-  const xmlResponse = jsontoxml(jsonResponse, true);
-  // const xmlResponse = jsontoxml({ response: jsonResponse }, true);
+  // const xmlResponse = jsontoxml(jsonResponse, true);
+  const xmlResponse = jsontoxml({ response: jsonResponse }, true);
 
   res.setHeader('Content-Type', 'text/xml');
   // res.setHeader('Accept', 'application/json');
