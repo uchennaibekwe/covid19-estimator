@@ -49,7 +49,7 @@ app.post('/api/v1/on-covid-19', (req, res) => {
 app.post('/api/v1/on-covid-19/json', (req, res) => {
   const response = estimator(req.body);
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Accept', 'application/json');
+  // res.setHeader('Accept', 'application/json');
   res.status(200).json(response);
 });
 
