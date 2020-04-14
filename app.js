@@ -39,21 +39,21 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/', (req, res) => {
+app.post('/api/v1/on-covid-19', (req, res) => {
   const response = estimator(req.body);
   res.set('Accept: application/json');
   res.set('Accept', 'application/json');
   res.status(200).json(response);
 });
 
-app.post('/json', (req, res) => {
+app.post('/api/v1/on-covid-19/json', (req, res) => {
   const response = estimator(req.body);
   res.set('Content-Type', 'application/json');
   res.set('Accept', 'application/json');
   res.status(200).json(response);
 });
 
-app.post('/xml', (req, res) => {
+app.post('/api/v1/on-covid-19/xml', (req, res) => {
   const jsonResponse = estimator(req.body);
   const xmlResponse = jsontoxml(jsonResponse, true);
 
