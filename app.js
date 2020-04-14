@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
   res.on('finish', () => {
     const durationInMilliseconds = getDurationInMilliseconds(start);
-    const logString = `${req.method}\t${req.originalUrl}\t${res.statusCode}\t${Math.trunc(durationInMilliseconds.toLocaleString())}ms\n`;
+    const logString = `${req.method}\t\t${req.originalUrl}\t\t${res.statusCode}\t\t${Math.trunc(durationInMilliseconds.toLocaleString())}ms\n`;
     fs.appendFile('logs.txt', logString, (err) => {
       if (err) {
         res.send(err);
@@ -41,7 +41,6 @@ app.use((req, res, next) => {
 
 app.post('/api/v1/on-covid-19', (req, res) => {
   const response = estimator(req.body);
-  res.set('Accept: application/json');
   res.set('Accept', 'application/json');
   res.status(200).json(response);
 });
