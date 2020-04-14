@@ -58,7 +58,6 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
   const xmlResponse = jsontoxml({ response: jsonResponse }, true);
 
   res.set('Content-Type', 'text/xml');
-  res.set('Accept', 'application/json');
   res.status(200).send(xmlResponse);
 });
 
