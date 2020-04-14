@@ -44,30 +44,45 @@ app.post('/api/v1/on-covid-19', (req, res) => {
   res.status(200).json(response);
 });
 
-app.post('/api/v1/on-covid-19/:format', (req, res) => {
+app.post('/api/v1/on-covid-19/json', (req, res) => {
   const response = estimator(req.body);
-  switch (req.params.format) {
-    case 'json':
-      res.status(200).json(response);
-      break;
-
-    case 'xml': {
-      const jsonResponse = estimator(req.body);
-      const xmlResponse = jsontoxml(jsonResponse, true);
-
-      res.set('Content-Type', 'text/xml');
-      res.status(200).send(xmlResponse);
-    }
-      break;
-
-    default:
-      res.status(404).json({
-        status: 'error',
-        error: 'Invalid Parameter. Use "json" or "xml" instead'
-      });
-      break;
-  }
+  res.set('Content-Type', 'application/json');
+  res.status(200).json(response);
 });
+
+app.post('/api/v1/on-covid-19/xml', (req, res) => {
+  const jsonResponse = estimator(req.body);
+  res.set('Content-Type', 'application/json');
+  const xmlResponse = jsontoxml(jsonResponse, true);
+
+  res.set('Content-Type', 'text/xml');
+  res.status(200).send(xmlResponse);
+});
+
+// app.post('/api/v1/on-covid-19/:format', (req, res) => {
+//   const response = estimator(req.body);
+//   switch (req.params.format) {
+//     case 'json':
+//       res.status(200).json(response);
+//       break;
+
+//     case 'xml': {
+//       const jsonResponse = estimator(req.body);
+//       const xmlResponse = jsontoxml(jsonResponse, true);
+
+//       res.set('Content-Type', 'text/xml');
+//       res.status(200).send(xmlResponse);
+//     }
+//       break;
+
+//     default:
+//       res.status(404).json({
+//         status: 'error',
+//         error: 'Invalid Parameter. Use "json" or "xml" instead'
+//       });
+//       break;
+//   }
+// });
 
 app.get('/api/v1/on-covid-19/logs', (req, res) => {
   fs.readFile('logs.txt', (err, data) => {
