@@ -89,7 +89,7 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
 
 app.get('/api/v1/on-covid-19/logs', (req, res) => {
   fs.readFile('logs.txt', (err, data) => {
-    res.setheader('Content-Type', 'text/plain');
+    res.set('Content-Type', 'text/plain');
     res.status(200).send(data);
   });
 });
