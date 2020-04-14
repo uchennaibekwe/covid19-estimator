@@ -28,8 +28,9 @@ app.use((req, res, next) => {
   const start = process.hrtime();
 
   res.on('finish', () => {
-    const durationInMilliseconds = getDurationInMilliseconds(start);
-    const logString = `${req.method}\t${req.originalUrl}\t${res.statusCode}\t${Math.trunc(durationInMilliseconds.toLocaleString())}ms\n`;
+    const durationInMilliseconds = Math.trunc(getDurationInMilliseconds(start)).toLocaleString();
+    const duration = durationInMilliseconds.length === 1 ? `0${durationInMilliseconds}` : durationInMilliseconds;
+    const logString = `${req.method}\t\t${req.originalUrl}\t\t${res.statusCode}\t\t${duration}ms\n`;
     fs.appendFile('logs.txt', logString, (err) => {
       if (err) {
         res.send(err);
@@ -88,7 +89,7 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
 
 app.get('/api/v1/on-covid-19/logs', (req, res) => {
   fs.readFile('logs.txt', (err, data) => {
-    res.set('Content-Type', 'text/plain');
+    res.setheader('Content-Type', 'text/plain');
     res.status(200).send(data);
   });
 });
